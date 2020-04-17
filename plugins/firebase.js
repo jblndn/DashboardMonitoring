@@ -16,7 +16,7 @@ export default !firebase.apps.length
     ? firebase.initializeApp(config).database()
     : firebase.app().database();
 
-const db = firebase.database();
+export const db = firebase.database();
 
 // db.ref('clients/' + 'pathe').set({
 //     name: "Pathé",
