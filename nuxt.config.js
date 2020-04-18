@@ -28,7 +28,8 @@ export default {
   ** Plugins to load before mounting the App
   */
   plugins: [
-      '~/plugins/firebase.js'
+      '~/plugins/firebase.js',
+      '~/plugins/vue-notification.js'
   ],
   /*
   ** Nuxt.js dev-modules

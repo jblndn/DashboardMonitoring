@@ -70,8 +70,13 @@
     .navigation{
         background-color: #323a6c!important;
         height: 100%;
+        top: 0;
+        left: 0;
         .item-link{
             text-decoration: none;
+        }
+        .v-list-item__content{
+            margin-left: 15px;
         }
     }
 
