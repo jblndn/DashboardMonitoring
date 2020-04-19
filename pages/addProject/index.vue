@@ -19,15 +19,15 @@
                 ></v-text-field>
                 <v-text-field
                         v-model="email"
-                        :error-messages="emailErrors"
                         label="E-mail"
+                        :error-messages="emailErrors"
                         @input="$v.email.$touch()"
                         @blur="$v.email.$touch()"
                 ></v-text-field>
                 <v-text-field
                         v-model="contactName"
-                        :error-messages="contactNameErrors"
                         label="Contact name"
+                        :error-messages="contactNameErrors"
                         @input="$v.contactName.$touch()"
                         @blur="$v.contactName.$touch()"
                 ></v-text-field>
@@ -39,13 +39,24 @@
                         @blur="$v.phone.$touch()"
                 ></v-text-field>
                 <v-select
-                        v-model="select"
-                        :items="clientsName"
-                        :error-messages="clientsErrors"
+                        v-model="selectClient"
+                        :items="items"
+                        item-text="name"
+                        item-value="id"
+                        :error-messages="selectClientErrors"
                         label="Client"
                         required
-                        @change="$v.select.$touch()"
-                        @blur="$v.select.$touch()"
+                        @change="$v.selectClient.$touch()"
+                        @blur="$v.selectClient.$touch()"
+                ></v-select>
+                <v-select
+                        v-model="selectStatus"
+                        :items="status"
+                        :error-messages="selectStatusErrors"
+                        label="Status"
+                        required
+                        @change="$v.selectStatus.$touch()"
+                        @blur="$v.selectStatus.$touch()"
                 ></v-select>
 
                 <v-btn class="mr-4" @click="submit">submit</v-btn>
@@ -59,7 +70,7 @@
 <script>
     import Navbar from '~/components/Navbar.vue'
     import { validationMixin } from 'vuelidate'
-    import { required, email, integer, alpha } from 'vuelidate/lib/validators'
+    import { required, email, integer } from 'vuelidate/lib/validators'
     import db from '~/plugins/firebase'
 
     export default {
@@ -69,11 +80,12 @@
         mixins: [validationMixin],
         validations: {
             name: { required },
-            email: { required, email },
+            email: { email, required },
             contactName: { required },
             phone: { integer },
-            client: { required },
-            description: {}
+            selectClient: { required },
+            description: {},
+            selectStatus: { required }
         },
         data: () => ({
             name: '',
@@ -81,9 +93,15 @@
             contactName: '',
             phone: '',
             description: '',
-            select: null,
-            clientsName: [],
-            clientsId: []
+            selectClient: null,
+            items: [],
+            selectStatus: null,
+            status: [
+                'Beginning',
+                'Waiting',
+                'In progress',
+                'Done'
+            ]
         }),
         computed: {
             nameErrors () {
@@ -111,10 +129,16 @@
                 !this.$v.phone.integer && errors.push('Must be valid phone number')
                 return errors
             },
-            clientsErrors (){
+            selectClientErrors (){
                 const errors = []
-                if (!this.$v.client.$dirty) return errors
-                !this.$v.client.required && errors.push('Contact name is required')
+                if (!this.$v.selectClient.$dirty) return errors
+                !this.$v.selectClient.required && errors.push('Client is required')
+                return errors
+            },
+            selectStatusErrors (){
+                const errors = []
+                if (!this.$v.selectStatus.$dirty) return errors
+                !this.$v.selectStatus.required && errors.push('Status is required')
                 return errors
             }
         },
@@ -124,22 +148,23 @@
         methods: {
             selectClients(){
                 let clients = db.ref('clients');
-                let keys = [];
-                let names = [];
+                let data = [];
 
                 clients.on('value', function(snapshot) {
                     snapshot.forEach(function(childSnapshot) {
+                        let childData = {};
                         let childKey = childSnapshot.key;
-                        let childDataName = childSnapshot.val().name;
+                        let childName = childSnapshot.val().name;
 
-                       keys.push(childKey);
-                       names.push(childDataName);
+                        childData.id = childKey;
+                        childData.name = childName;
+
+                        data.push(childData);
+
                     });
                 });
 
-                this.clientsId = keys;
-                this.clientsName = names;
-
+                this.items = data;
             },
             submit () {
                 let data = {};
@@ -150,14 +175,19 @@
                 data.email = this.email;
                 data.contactName= this.contactName;
                 data.phone = this.phone;
+                data.selectClient = this.selectClient;
+                data.status = this.status;
                 projectId = this.formatId(this.name);
 
-                //Send db
+
+                // //Send db
                 db.ref( 'projects/' + projectId ).set({
                     name: data.name,
-                    contactName:  data.contactName,
                     email: data.email,
-                    tel: data.phone
+                    contactName:  data.contactName,
+                    phone: data.phone,
+                    client : data.selectClient,
+                    status: data.status
                 });
 
 
@@ -168,6 +198,8 @@
                 this.email = ''
                 this.contactName = ''
                 this.phone = ''
+                this.selectClient = ''
+                this.status = ''
 
                 //Notification send
                 // this.$notify({
@@ -193,11 +225,14 @@
                 return str
             },
             clear () {
+                this.$v.$touch()
                 this.$v.$reset()
                 this.name = ''
                 this.email = ''
                 this.contactName = ''
                 this.phone = ''
+                this.selectClient = ''
+                this.status = ''
             },
         },
     }
@@ -209,16 +244,6 @@
         min-width: 500px;
         margin: 50px auto;
 
-        .v-input{
-            &.error--text{
-                color: red;
-                .v-text-field__details{
-                    .v-messages__message{
-                        color: red;
-                    }
-                }
-            }
-        }
     }
 
 </style>
