@@ -4,24 +4,24 @@
         <div class="container">
             <v-layout row wrap justify-flex-start>
                 <v-card
-                        v-for="client in clients" :key="client.clientId"
+                        v-for="project in projects" :key="project.projectId"
                 >
                     <v-card-text>
                         <p class="display-1 text--primary">
-                            {{ client.name }}
+                            {{ project.name }}
                         </p>
                         <div class="text--primary">
-                            Contact : {{ client.contactName }}
+                            Contact : {{ project.contactName }}
                         </div>
                         <div class="text--primary">
-                            Email : <a :href="'mailto:' + client.email">{{ client.email }}</a>
+                            Email : <a :href="'mailto:' + project.email">{{ project.email }}</a>
                         </div>
                         <div class="text--primary">
-                            Phone : {{ client.phone }}
+                            Phone : {{ project.phone }}
                         </div>
                     </v-card-text>
                     <v-card-actions>
-                        <v-icon color="blue darken-2" @click="deleteClient(client.clientId)">mdi-delete</v-icon>
+                        <v-icon color="blue darken-2" @click="deleteClient(project.projectId)">mdi-delete</v-icon>
                     </v-card-actions>
                 </v-card>
 
@@ -39,35 +39,35 @@
             Navbar
         },
         data: () => ({
-            clients: [],
+            projects: [],
         }),
         beforeMount(){
-            let clients = db.ref('clients');
+            let projects = db.ref('projects');
             let data = [];
 
-            clients.on('value', function(snapshot) {
+            projects.on('value', function(snapshot) {
                 snapshot.forEach(function(childSnapshot) {
                     let childData = childSnapshot.val();
 
                     let childKey = childSnapshot.key;
-                    childData.clientId = childKey;
+                    childData.projectId = childKey;
 
                     data.push(childData);
 
                 });
             });
 
-            this.clients = data;
+            this.projects = data;
         },
         methods: {
             deleteClient(id){
-                let client = db.ref('clients/' + id );
+                let project = db.ref('projects/' + id );
 
-                for (let i = 0; i < this.clients.length; i++) {
-                    if (this.clients[i].clientId == id) this.clients.splice(i, 1);
+                for (let i = 0; i < this.projects.length; i++) {
+                    if (this.projects[i].projectId == id) this.projects.splice(i, 1);
                 }
 
-                client.remove();
+                project.remove();
 
             }
         }

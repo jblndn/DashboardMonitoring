@@ -176,7 +176,7 @@
                 data.contactName= this.contactName;
                 data.phone = this.phone;
                 data.selectClient = this.selectClient;
-                data.status = this.status;
+                data.selectStatus = this.selectStatus;
                 projectId = this.formatId(this.name);
 
 
@@ -187,7 +187,7 @@
                     contactName:  data.contactName,
                     phone: data.phone,
                     client : data.selectClient,
-                    status: data.status
+                    status: data.selectStatus
                 });
 
 

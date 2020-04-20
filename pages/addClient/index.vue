@@ -113,7 +113,7 @@
                     name: data.name,
                     contactName:  data.contactName,
                     email: data.email,
-                    tel: data.phone
+                    phone: data.phone
                 });
 
 
