@@ -18,17 +18,3 @@ export default !firebase.apps.length
 
 export const db = firebase.database();
 
-// db.ref('clients/' + 'pathe').set({
-//     name: "Pathé",
-//     contactName: "Charlotte Dubois",
-//     email: "jb@mail.com",
-//     tel: "0645757575"
-// });
-// db.ref('projects/').push({
-//     name: "Pathé vidéo",
-//     clientId: "pathe",
-//     clientName: "Pathé",
-//     type: "Création vidéo",
-//     statut: "En cours",
-//     comments: "C'est nul ce projet"
-// });

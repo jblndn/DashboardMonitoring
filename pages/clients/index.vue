@@ -33,6 +33,9 @@
 <script>
     import Navbar from '~/components/Navbar.vue'
     import db from '~/plugins/firebase'
+    import * as firebase from 'firebase';
+    import 'firebase/firestore';
+    import Vue from 'vue'
 
     export default {
         components: {
@@ -42,33 +45,31 @@
             clients: [],
         }),
         beforeMount(){
-            let clients = db.ref('clients');
-            let data = [];
-
-            clients.on('value', function(snapshot) {
-                snapshot.forEach(function(childSnapshot) {
-                    let childData = childSnapshot.val();
-
-                    let childKey = childSnapshot.key;
-                    childData.clientId = childKey;
-
-                    data.push(childData);
-
-                });
-            });
-
-            this.clients = data;
+            this.getClients();
         },
         methods: {
+            getClients(){
+                let clients = db.ref('clients');
+                let data = [];
+
+                clients.on('value', function(snapshot) {
+                    snapshot.forEach(function(childSnapshot) {
+                        let childData = childSnapshot.val();
+
+                        let childKey = childSnapshot.key;
+                        childData.clientId = childKey;
+
+                        data.push(childData);
+
+                    });
+                });
+
+                this.clients = data;
+            },
             deleteClient(id){
                 let client = db.ref('clients/' + id );
-
-                for (let i = 0; i < this.clients.length; i++) {
-                    if (this.clients[i].clientId == id) this.clients.splice(i, 1);
-                }
-
                 client.remove();
-
+                this.getClients();
             }
         }
     }

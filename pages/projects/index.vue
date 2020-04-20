@@ -21,7 +21,7 @@
                         </div>
                     </v-card-text>
                     <v-card-actions>
-                        <v-icon color="blue darken-2" @click="deleteClient(project.projectId)">mdi-delete</v-icon>
+                        <v-icon color="blue darken-2" @click="deleteProject(project.projectId)">mdi-delete</v-icon>
                     </v-card-actions>
                 </v-card>
 
@@ -42,32 +42,31 @@
             projects: [],
         }),
         beforeMount(){
-            let projects = db.ref('projects');
-            let data = [];
-
-            projects.on('value', function(snapshot) {
-                snapshot.forEach(function(childSnapshot) {
-                    let childData = childSnapshot.val();
-
-                    let childKey = childSnapshot.key;
-                    childData.projectId = childKey;
-
-                    data.push(childData);
-
-                });
-            });
-
-            this.projects = data;
+            this.getProjects();
         },
         methods: {
-            deleteClient(id){
+            getProjects(){
+                let projects = db.ref('projects');
+                let data = [];
+
+                projects.on('value', function(snapshot) {
+                    snapshot.forEach(function(childSnapshot) {
+                        let childData = childSnapshot.val();
+
+                        let childKey = childSnapshot.key;
+                        childData.projectId = childKey;
+
+                        data.push(childData);
+
+                    });
+                });
+
+                this.projects = data;
+            },
+            deleteProject(id){
                 let project = db.ref('projects/' + id );
-
-                for (let i = 0; i < this.projects.length; i++) {
-                    if (this.projects[i].projectId == id) this.projects.splice(i, 1);
-                }
-
                 project.remove();
+                this.getProjects();
 
             }
         }
@@ -78,8 +77,7 @@
     .v-card{
         display: inline-block;
         padding: 20px;
-        min-width: 300px;
-        max-width: 550px;
+        width: 350px;
         margin-right: 50px;
         margin-bottom: 50px;
 

@@ -22,6 +22,10 @@ html {
   box-sizing: border-box;
 }
 
+.container{
+  max-width: 75%;
+}
+
 *,
 *:before,
 *:after {

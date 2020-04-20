@@ -13,10 +13,11 @@
                         @input="$v.name.$touch()"
                         @blur="$v.name.$touch()"
                 ></v-text-field>
-                <v-text-field
+                <v-textarea
                         v-model="description"
                         label="Description"
-                ></v-text-field>
+                        class="input-description"
+                ></v-textarea>
                 <v-text-field
                         v-model="email"
                         label="E-mail"
@@ -198,8 +199,9 @@
                 this.email = ''
                 this.contactName = ''
                 this.phone = ''
+                this.description = ''
                 this.selectClient = ''
-                this.status = ''
+                this.selectStatus = ''
 
                 //Notification send
                 // this.$notify({
@@ -232,7 +234,7 @@
                 this.contactName = ''
                 this.phone = ''
                 this.selectClient = ''
-                this.status = ''
+                this.selectStatus = ''
             },
         },
     }
@@ -244,6 +246,12 @@
         min-width: 500px;
         margin: 50px auto;
 
+        .input-description{
+            .v-text-field__slot{
+                height: 150px;
+            }
+
+        }
     }
 
 </style>
