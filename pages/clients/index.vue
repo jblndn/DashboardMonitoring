@@ -3,7 +3,10 @@
     <div class="container">
         <v-layout row wrap justify-flex-start>
             <v-card
-                    v-for="client in clients" :key="client.clientId"
+                    v-for="client in clients"
+                    :key="client.clientId"
+                    :to="'Clients/' + client.clientId"
+                    link
             >
                 <v-card-text>
                     <p class="display-1 text--primary">

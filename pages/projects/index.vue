@@ -2,7 +2,11 @@
     <div class="container">
         <v-layout row wrap justify-flex-start>
             <v-card
-                    v-for="project in projects" :key="project.projectId" :class="project.status"
+                    v-for="project in projects"
+                    :key="project.projectId"
+                    :class="project.status"
+                    :to="'Projects/' + project.projectId"
+                    link
             >
                 <v-card-text>
                     <p class="display-1 text--primary">
@@ -37,6 +41,9 @@
         }),
         beforeMount(){
             this.getProjects();
+        },
+        asyncData () {
+
         },
         methods: {
             getProjects(){
@@ -78,6 +85,12 @@
         display: flex;
         flex-direction: column;
         justify-content: space-between;
+        text-decoration: none!important;
+
+        &:hover{
+            transform: scale(1.02);
+            transition: transform 300ms ease-in-out;
+        }
 
         &.beginning, &.waiting, &.in-progress, &.done{
             border-bottom-width: 2px;

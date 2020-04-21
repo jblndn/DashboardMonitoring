@@ -35,6 +35,7 @@ html {
 
 .container{
   max-width: 75%;
+  padding: 40px 12px 12px 12px;
 }
 
 *,
