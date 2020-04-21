@@ -56,7 +56,7 @@
                 drawer: true,
                 items: [
                     { title: 'Clients', icon: 'mdi-account-box', link: "/Clients" },
-                    { title: 'Projects', icon: 'mdi-desktop-mac', link: "/Projets" }],
+                    { title: 'Projects', icon: 'mdi-desktop-mac', link: "/Projects" }],
                 color: 'primary',
                 right: false,
                 miniVariant: true,

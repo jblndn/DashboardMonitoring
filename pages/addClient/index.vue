@@ -1,61 +1,52 @@
 <template>
-    <div>
-        <Navbar class="overflow-hidden" />
+    <div class="container">
+        <form>
+            <v-text-field
+                    v-model="name"
+                    :error-messages="nameErrors"
+                    label="Name"
+                    required
+                    @input="$v.name.$touch()"
+                    @blur="$v.name.$touch()"
+            ></v-text-field>
+            <v-text-field
+                    v-model="email"
+                    :error-messages="emailErrors"
+                    label="E-mail"
+                    required
+                    @input="$v.email.$touch()"
+                    @blur="$v.email.$touch()"
+            ></v-text-field>
+            <v-text-field
+                    v-model="contactName"
+                    :error-messages="contactNameErrors"
+                    label="Contact name"
+                    required
+                    @input="$v.contactName.$touch()"
+                    @blur="$v.contactName.$touch()"
+            ></v-text-field>
+            <v-text-field
+                    v-model="phone"
+                    :error-messages="phoneErrors"
+                    label="Phone number"
+                    required
+                    @input="$v.phone.$touch()"
+                    @blur="$v.phone.$touch()"
+            ></v-text-field>
 
-        <div class="container">
-
-            <form>
-                <v-text-field
-                        v-model="name"
-                        :error-messages="nameErrors"
-                        label="Name"
-                        required
-                        @input="$v.name.$touch()"
-                        @blur="$v.name.$touch()"
-                ></v-text-field>
-                <v-text-field
-                        v-model="email"
-                        :error-messages="emailErrors"
-                        label="E-mail"
-                        required
-                        @input="$v.email.$touch()"
-                        @blur="$v.email.$touch()"
-                ></v-text-field>
-                <v-text-field
-                        v-model="contactName"
-                        :error-messages="contactNameErrors"
-                        label="Contact name"
-                        required
-                        @input="$v.contactName.$touch()"
-                        @blur="$v.contactName.$touch()"
-                ></v-text-field>
-                <v-text-field
-                        v-model="phone"
-                        :error-messages="phoneErrors"
-                        label="Phone number"
-                        required
-                        @input="$v.phone.$touch()"
-                        @blur="$v.phone.$touch()"
-                ></v-text-field>
-
-                <v-btn class="mr-4" @click="submit">submit</v-btn>
-                <v-btn @click="clear">clear</v-btn>
-            </form>
-            <!--<notifications group="add" />-->
-        </div>
+            <v-btn class="mr-4" @click="submit">submit</v-btn>
+            <v-btn @click="clear">clear</v-btn>
+        </form>
+        <!--<notifications group="add" />-->
     </div>
 </template>
 
 <script>
-    import Navbar from '~/components/Navbar.vue'
     import { validationMixin } from 'vuelidate'
     import { required, email, integer, alpha } from 'vuelidate/lib/validators'
     import db from '~/plugins/firebase'
 
     export default {
-        components: {
-            Navbar
-        },
         mixins: [validationMixin],
         validations: {
             name: { required },

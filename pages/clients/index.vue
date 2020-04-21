@@ -1,46 +1,39 @@
 <template>
-    <div>
-        <Navbar class="overflow-hidden" />
-        <div class="container">
-            <v-layout row wrap justify-flex-start>
-                <v-card
-                        v-for="client in clients" :key="client.clientId"
-                >
-                    <v-card-text>
-                        <p class="display-1 text--primary">
-                            {{ client.name }}
-                        </p>
-                        <div class="text--primary">
-                            Contact : {{ client.contactName }}
-                        </div>
-                        <div class="text--primary">
-                            Email : <a :href="'mailto:' + client.email">{{ client.email }}</a>
-                        </div>
-                        <div class="text--primary">
-                            Phone : {{ client.phone }}
-                        </div>
-                    </v-card-text>
-                    <v-card-actions>
-                        <v-icon color="blue darken-2" @click="deleteClient(client.clientId)">mdi-delete</v-icon>
-                    </v-card-actions>
-                </v-card>
 
-            </v-layout>
-        </div>
+    <div class="container">
+        <v-layout row wrap justify-flex-start>
+            <v-card
+                    v-for="client in clients" :key="client.clientId"
+            >
+                <v-card-text>
+                    <p class="display-1 text--primary">
+                        {{ client.name }}
+                    </p>
+                    <div class="text--primary">
+                        Contact : {{ client.contactName }}
+                    </div>
+                    <div class="text--primary">
+                        Email : <a :href="'mailto:' + client.email">{{ client.email }}</a>
+                    </div>
+                    <div class="text--primary">
+                        Phone : {{ client.phone }}
+                    </div>
+                </v-card-text>
+                <v-card-actions>
+                    <v-icon color="blue darken-2" @click="deleteClient(client.clientId)">mdi-delete</v-icon>
+                </v-card-actions>
+            </v-card>
+
+        </v-layout>
     </div>
+
 </template>
 
 <script>
-    import Navbar from '~/components/Navbar.vue'
     import db from '~/plugins/firebase'
-    import * as firebase from 'firebase';
     import 'firebase/firestore';
-    import Vue from 'vue'
 
     export default {
-        components: {
-            Navbar
-        },
         data: () => ({
             clients: [],
         }),

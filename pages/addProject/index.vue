@@ -1,83 +1,75 @@
 <template>
-    <div>
-        <Navbar class="overflow-hidden" />
+    <div class="container">
+        <form>
+            <v-text-field
+                    v-model="name"
+                    :error-messages="nameErrors"
+                    label="Name"
+                    required
+                    @input="$v.name.$touch()"
+                    @blur="$v.name.$touch()"
+            ></v-text-field>
+            <v-textarea
+                    v-model="description"
+                    label="Description"
+                    class="input-description"
+            ></v-textarea>
+            <v-text-field
+                    v-model="email"
+                    label="E-mail"
+                    :error-messages="emailErrors"
+                    @input="$v.email.$touch()"
+                    @blur="$v.email.$touch()"
+            ></v-text-field>
+            <v-text-field
+                    v-model="contactName"
+                    label="Contact name"
+                    :error-messages="contactNameErrors"
+                    @input="$v.contactName.$touch()"
+                    @blur="$v.contactName.$touch()"
+            ></v-text-field>
+            <v-text-field
+                    v-model="phone"
+                    :error-messages="phoneErrors"
+                    label="Phone number"
+                    @input="$v.phone.$touch()"
+                    @blur="$v.phone.$touch()"
+            ></v-text-field>
+            <v-select
+                    v-model="selectClient"
+                    :items="items"
+                    item-text="name"
+                    item-value="id"
+                    :error-messages="selectClientErrors"
+                    label="Client"
+                    required
+                    @change="$v.selectClient.$touch()"
+                    @blur="$v.selectClient.$touch()"
+            ></v-select>
+            <v-select
+                    v-model="selectStatus"
+                    :items="status"
+                    :error-messages="selectStatusErrors"
+                    label="Status"
+                    required
+                    @change="$v.selectStatus.$touch()"
+                    @blur="$v.selectStatus.$touch()"
+            ></v-select>
 
-        <div class="container">
-
-            <form>
-                <v-text-field
-                        v-model="name"
-                        :error-messages="nameErrors"
-                        label="Name"
-                        required
-                        @input="$v.name.$touch()"
-                        @blur="$v.name.$touch()"
-                ></v-text-field>
-                <v-textarea
-                        v-model="description"
-                        label="Description"
-                        class="input-description"
-                ></v-textarea>
-                <v-text-field
-                        v-model="email"
-                        label="E-mail"
-                        :error-messages="emailErrors"
-                        @input="$v.email.$touch()"
-                        @blur="$v.email.$touch()"
-                ></v-text-field>
-                <v-text-field
-                        v-model="contactName"
-                        label="Contact name"
-                        :error-messages="contactNameErrors"
-                        @input="$v.contactName.$touch()"
-                        @blur="$v.contactName.$touch()"
-                ></v-text-field>
-                <v-text-field
-                        v-model="phone"
-                        :error-messages="phoneErrors"
-                        label="Phone number"
-                        @input="$v.phone.$touch()"
-                        @blur="$v.phone.$touch()"
-                ></v-text-field>
-                <v-select
-                        v-model="selectClient"
-                        :items="items"
-                        item-text="name"
-                        item-value="id"
-                        :error-messages="selectClientErrors"
-                        label="Client"
-                        required
-                        @change="$v.selectClient.$touch()"
-                        @blur="$v.selectClient.$touch()"
-                ></v-select>
-                <v-select
-                        v-model="selectStatus"
-                        :items="status"
-                        :error-messages="selectStatusErrors"
-                        label="Status"
-                        required
-                        @change="$v.selectStatus.$touch()"
-                        @blur="$v.selectStatus.$touch()"
-                ></v-select>
-
-                <v-btn class="mr-4" @click="submit">submit</v-btn>
-                <v-btn @click="clear">clear</v-btn>
-            </form>
-            <!--<notifications group="add" />-->
-        </div>
+            <v-btn class="mr-4" @click="submit">submit</v-btn>
+            <v-btn @click="clear">clear</v-btn>
+        </form>
+        <!--<notifications group="add" />-->
     </div>
+
 </template>
 
 <script>
-    import Navbar from '~/components/Navbar.vue'
     import { validationMixin } from 'vuelidate'
     import { required, email, integer } from 'vuelidate/lib/validators'
     import db from '~/plugins/firebase'
 
     export default {
-        components: {
-            Navbar
-        },
         mixins: [validationMixin],
         validations: {
             name: { required },
@@ -167,6 +159,14 @@
 
                 this.items = data;
             },
+            addProjectToClient(projectId, clientId){
+                let update = {};
+
+                update['clients/' + clientId + '/projects/' + projectId] = clientId;
+
+                db.ref().update(update);
+
+            },
             submit () {
                 let data = {};
                 let projectId;
@@ -176,20 +176,23 @@
                 data.email = this.email;
                 data.contactName= this.contactName;
                 data.phone = this.phone;
-                data.selectClient = this.selectClient;
-                data.selectStatus = this.selectStatus;
+                data.clientId = this.selectClient;
+                data.status = this.selectStatus;
                 projectId = this.formatId(this.name);
 
 
-                // //Send db
+                //Send db projects
                 db.ref( 'projects/' + projectId ).set({
                     name: data.name,
                     email: data.email,
                     contactName:  data.contactName,
                     phone: data.phone,
-                    client : data.selectClient,
-                    status: data.selectStatus
+                    clientId : data.clientId,
+                    status: data.status
                 });
+
+                //Send db clients
+                this.addProjectToClient(projectId, data.clientId);
 
 
                 //Reset form
@@ -221,8 +224,8 @@
                 str = str.replace(/[óòõöô]/,"o");
                 str = str.replace(/[úùüû]/,"u");
                 str = str.replace(/[ç]/,"c");
-                str  = str.replace(/[^a-zA-Z0-9+]/g, "");
-
+                str = str.replace(/ /g, "-");
+                str  = str.replace(/[^a-zA-Z0-9+\\-]/g, "");
 
                 return str
             },
