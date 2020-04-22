@@ -59,7 +59,7 @@
             <v-btn class="mr-4" @click="submit">submit</v-btn>
             <v-btn @click="clear">clear</v-btn>
         </form>
-        <!--<notifications group="add" />-->
+        <notifications group="add" />
     </div>
 
 </template>
@@ -207,12 +207,12 @@
                 this.selectStatus = ''
 
                 //Notification send
-                // this.$notify({
-                //     group: 'add',
-                //     title: 'Client ajouté',
-                //     type: 'sucess',
-                //     position: 'top right'
-                // });
+                this.$notify({
+                    group: 'add',
+                    title: 'Project added with success',
+                    type: 'success',
+                    position: 'top right'
+                });
 
             },
             formatId (str){

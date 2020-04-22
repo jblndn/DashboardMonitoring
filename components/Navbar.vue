@@ -56,7 +56,9 @@
                 drawer: true,
                 items: [
                     { title: 'Clients', icon: 'mdi-account-box', link: "/Clients" },
-                    { title: 'Projects', icon: 'mdi-desktop-mac', link: "/Projects" }],
+                    { title: 'Projects', icon: 'mdi-tag', link: "/Projects" },
+                    { title: 'Add client', icon: 'mdi-account-plus', link: "/addClient" },
+                    { title: 'Add project', icon: 'mdi-tag-plus', link: "/addProject" }],
                 color: 'primary',
                 right: false,
                 miniVariant: true,

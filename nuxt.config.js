@@ -29,7 +29,7 @@ export default {
   */
   plugins: [
       '~/plugins/firebase.js',
-      '~/plugins/vue-notification.js'
+      { src: '~/plugins/vue-notification.js', ssr: false}
   ],
   /*
   ** Nuxt.js dev-modules

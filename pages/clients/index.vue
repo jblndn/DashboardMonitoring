@@ -18,7 +18,7 @@
                     <div class="text--primary">
                         Email : <a :href="'mailto:' + client.email">{{ client.email }}</a>
                     </div>
-                    <div class="text--primary">
+                    <div v-if="client.phone" class="text--primary">
                         Phone : {{ client.phone }}
                     </div>
                 </v-card-text>
@@ -73,12 +73,20 @@
 
 <style lang="scss">
     .v-card{
-        display: inline-block;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
         padding: 20px;
         min-width: 300px;
         max-width: 550px;
         margin-right: 50px;
         margin-bottom: 50px;
+        text-decoration: none!important;
+
+        &:hover{
+            transform: scale(1.02);
+            transition: transform 300ms ease-in-out;
+        }
 
         .v-card__actions{
             justify-content: flex-end;

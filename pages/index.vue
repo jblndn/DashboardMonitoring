@@ -1,5 +1,8 @@
 <template>
   <div class="container">
+    <h1 class="display-3">
+      Welcome to your dashboard
+    </h1>
   </div>
 </template>
 
@@ -12,6 +15,7 @@
     justify-content: center;
     align-items: center;
     text-align: center;
+    padding: 0;
   }
 
   .title {

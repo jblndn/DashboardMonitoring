@@ -42,9 +42,6 @@
         beforeMount(){
             this.getProjects();
         },
-        asyncData () {
-
-        },
         methods: {
             getProjects(){
                 let projects = db.ref('projects');
